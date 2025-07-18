@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Moving Motivators</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ffe259, #ffa751);
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: transparent;
+      padding: 40px;
+      max-width: 960px;
+      margin: auto;
+      border-radius: 15px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #d700a6;
+      margin-bottom: 30px;
+    }
+    .question {
+      margin-bottom: 35px;
+      padding: 25px;
+      background: #fff0f7;
+      border-left: 6px solid #d700a6;
+      border-radius: 10px;
+    }
+    .question p {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 12px;
+    }
+    .question label {
+      display: block;
+      margin-left: 15px;
+      margin-bottom: 8px;
+      font-weight: normal;
+      color: #222;
+      cursor: pointer;
+    }
+    .question input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    .result {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 1.2em;
+      color: #444;
+      background: #ffe7f3;
+      border: 2px solid #d700a6;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .result h2 {
+      color: #d700a6;
+      margin-bottom: 20px;
+    }
+    .ranking-box {
+      background: #fff;
+      border: 2px dashed #d700a6;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    button {
+      display: block;
+      margin: 40px auto 20px auto;
+      padding: 14px 28px;
+      font-size: 18px;
+      background-color: #d700a6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+    button:hover {
+      background-color: #b30085;
+      transform: scale(1.03);
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Test Moving Motivators</h1>
+    <form id="motivatorsForm">
+      <div id="questions"></div>
+      <button type="submit">Ver mis motivadores principales</button>
+    </form>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const preguntasYRespuestas = [
+  {
+    pregunta: "¿Qué te haría sentir más satisfecho en tu trabajo actual?",
+    opciones: [
+      "A. Que los demás valoren quién soy",
+      "B. Tener espacio para aprender y explorar",
+      "C. Poder decidir cómo trabajar",
+      "D. Ser reconocido públicamente",
+      "E. Sentir que mi trabajo tiene un propósito",
+      "F. Actuar conforme a mis valores",
+      "G. Superarme con nuevos retos",
+      "H. Tener reglas y estructuras claras",
+      "I. Poder influir en decisiones",
+      "J. Tener relaciones cercanas en el equipo"
+    ]
+  },
+  {
+    pregunta: "¿Al llegar a una nueva empresa, qué valoras más?",
+    opciones: [
+      "A. Sentirme aceptado por el equipo",
+      "B. Poder hacer preguntas y descubrir cosas",
+      "C. Autonomía desde el inicio",
+      "D. Que reconozcan mi experiencia",
+      "E. Conectarme con su propósito",
+      "F. Que compartan mis valores",
+      "G. Aprender algo nuevo",
+      "H. Que todo esté claro y organizado",
+      "I. Tener voz desde el principio",
+      "J. Hacer lazos genuinos con personas"
+    ]
+  },
+  {
+    pregunta: "¿Qué te entusiasma más al iniciar un nuevo proyecto?",
+    opciones: [
+      "A. Que confíen en mí para hacerlo",
+      "B. Que implique investigar algo nuevo",
+      "C. Tener libertad para ejecutarlo a mi manera",
+      "D. Que me dé visibilidad",
+      "E. Que genere un impacto significativo",
+      "F. Que refleje mis principios",
+      "G. Que me rete profesionalmente",
+      "H. Que esté bien estructurado",
+      "I. Que pueda tomar decisiones clave",
+      "J. Que lo trabaje con personas que aprecio"
+    ]
+  },
+  {
+    pregunta: "¿Qué te frustra más cuando trabajas con otros?",
+    opciones: [
+      "A. Sentirme excluido del grupo",
+      "B. Que no se puedan hacer preguntas",
+      "C. Que me digan todo lo que tengo que hacer",
+      "D. Que no reconozcan mis logros",
+      "E. Que lo que hago no tenga sentido",
+      "F. Que me hagan actuar contra mis principios",
+      "G. Que no haya retos nuevos",
+      "H. Que haya desorganización",
+      "I. Que mis opiniones no cuenten",
+      "J. Que haya frialdad en el equipo"
+    ]
+  },
+  {
+    pregunta: "¿Qué tipo de reconocimiento te hace sentir mejor?",
+    opciones: [
+      "A. Que me acepten como soy",
+      "B. Que valoren mi creatividad",
+      "C. Que respeten mis decisiones",
+      "D. Que me aplaudan en público",
+      "E. Que digan que generé impacto",
+      "F. Que reconozcan mis valores",
+      "G. Que me feliciten por mejorar",
+      "H. Que valoren mi forma ordenada de trabajar",
+      "I. Que reconozcan mis aportes estratégicos",
+      "J. Que me agradezcan con cariño"
+    ]
+  },
+  {
+    pregunta: "¿Qué te impulsa a permanecer en una empresa a largo plazo?",
+    opciones: [
+      "A. Tener un buen ambiente humano",
+      "B. Seguir aprendiendo y creciendo",
+      "C. Libertad para trabajar a mi ritmo",
+      "D. Oportunidades para destacar",
+      "E. Sentido de propósito",
+      "F. Cultura alineada con mis valores",
+      "G. Rutas claras de desarrollo profesional",
+      "H. Procesos bien definidos",
+      "I. Participación en decisiones importantes",
+      "J. Buenas relaciones con compañeros"
+    ]
+  },
+  {
+    pregunta: "¿Qué hace que un trabajo sea realmente significativo para ti?",
+    opciones: [
+      "A. Que me sienta aceptado",
+      "B. Que explore cosas nuevas",
+      "C. Que tenga libertad de acción",
+      "D. Que me reconozcan constantemente",
+      "E. Que ayude a otros o genere cambio",
+      "F. Que actúe desde mi ética personal",
+      "G. Que mejore como profesional",
+      "H. Que tenga procesos claros",
+      "I. Que tenga impacto en decisiones",
+      "J. Que me conecte emocionalmente con el equipo"
+    ]
+  },
+  {
+    pregunta: "¿Qué te desmotiva más rápido en el trabajo?",
+    opciones: [
+      "A. Sentirme aislado",
+      "B. No poder cuestionar o crear",
+      "C. Tener reglas impuestas",
+      "D. Que no valoren mi esfuerzo",
+      "E. No ver un propósito",
+      "F. Ir en contra de mis principios",
+      "G. No tener nada nuevo que aprender",
+      "H. Falta de estructura",
+      "I. No tener poder de decisión",
+      "J. Falta de conexión con los demás"
+    ]
+  },
+  {
+    pregunta: "¿Qué te motiva más en los momentos difíciles?",
+    opciones: [
+      "A. Apoyo emocional del equipo",
+      "B. Oportunidad de descubrir algo",
+      "C. Libertad para replantear el camino",
+      "D. Reconocimiento por seguir adelante",
+      "E. Recordar que hay una causa",
+      "F. Ser coherente con mis valores",
+      "G. Convertirlo en un reto personal",
+      "H. Tener un plan claro",
+      "I. Sentir que puedo influir",
+      "J. Sentirme acompañado"
+    ]
+  },
+  {
+    pregunta: "¿Qué te da mayor orgullo de tu trabajo?",
+    opciones: [
+      "A. Que me acepten por quién soy",
+      "B. Que aprendí mucho",
+      "C. Que lo logré con autonomía",
+      "D. Que me reconocieron",
+      "E. Que generé un cambio real",
+      "F. Que actué con integridad",
+      "G. Que alcancé un nuevo nivel",
+      "H. Que todo fluyó bien",
+      "I. Que tomé decisiones importantes",
+      "J. Que lo hice con otros valiosos para mí"
+    ]
+  },
+  {
+    pregunta: "¿Qué te hace sentir inseguro en el trabajo?",
+    opciones: [
+      "A. Que no me incluyan",
+      "B. Que no pueda hacer preguntas",
+      "C. Que no me dejen decidir",
+      "D. Que ignoren mis logros",
+      "E. Que no haya sentido en lo que hago",
+      "F. Que actúe en contra de mis valores",
+      "G. Que me estanque",
+      "H. Que no haya reglas claras",
+      "I. Que no me escuchen",
+      "J. Que no tenga vínculos"
+    ]
+  },
+  {
+    pregunta: "¿Qué valoras más en tus líderes?",
+    opciones: [
+      "A. Que me hagan sentir aceptado",
+      "B. Que me enseñen y reten",
+      "C. Que me den autonomía",
+      "D. Que reconozcan mis talentos",
+      "E. Que transmitan propósito",
+      "F. Que sean íntegros",
+      "G. Que me ayuden a mejorar",
+      "H. Que sean organizados",
+      "I. Que compartan decisiones",
+      "J. Que sean cercanos"
+    ]
+  },
+  {
+    pregunta: "¿Qué te hace sentir parte de un equipo?",
+    opciones: [
+      "A. Que me incluyan y respeten",
+      "B. Que valoren mis ideas nuevas",
+      "C. Que respeten cómo trabajo",
+      "D. Que reconozcan lo que aporto",
+      "E. Que compartamos metas importantes",
+      "F. Que estemos alineados en principios",
+      "G. Que nos ayudemos a crecer",
+      "H. Que cumplamos acuerdos",
+      "I. Que tengamos espacios de participación",
+      "J. Que haya conexión auténtica"
+    ]
+  },
+  {
+    pregunta: "¿Qué te ayuda a confiar en tu empresa?",
+    opciones: [
+      "A. Que acepten la diversidad",
+      "B. Que promuevan la innovación",
+      "C. Que fomenten la autonomía",
+      "D. Que reconozcan al talento",
+      "E. Que estén comprometidos con una causa",
+      "F. Que actúen éticamente",
+      "G. Que inviertan en desarrollo",
+      "H. Que mantengan claridad",
+      "I. Que escuchen a todos",
+      "J. Que prioricen las relaciones humanas"
+    ]
+  }
+];
+
+    const container = document.getElementById("questions");
+    preguntasYRespuestas.forEach((item, index) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      const p = document.createElement("p");
+      p.textContent = `${index + 1}. ${item.pregunta}`;
+      div.appendChild(p);
+
+      item.opciones.forEach(op => {
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.name = `q${index}`;
+        input.value = op.charAt(0);
+        const label = document.createElement("label");
+        label.textContent = op;
+        label.prepend(input);
+        div.appendChild(label);
+      });
+
+      container.appendChild(div);
+    });
+
+    document.getElementById("motivatorsForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const counts = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, G: 0, H: 0, I: 0, J: 0 };
+      preguntasYRespuestas.forEach((_, i) => {
+        const seleccionados = document.querySelectorAll(`input[name=q${i}]:checked`);
+        seleccionados.forEach(input => {
+          counts[input.value]++;
+        });
+      });
+
+      const motivadores = {
+        A: "Aceptación",
+        B: "Curiosidad",
+        C: "Libertad",
+        D: "Estatus",
+        E: "Meta",
+        F: "Honra",
+        G: "Maestría",
+        H: "Orden",
+        I: "Poder",
+        J: "Relaciones"
+      };
+
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      const top3 = sorted.slice(0, 3);
+
+      let resultadoHTML = `<h2>Ranking de motivadores principales:</h2><div class='ranking-box'>`;
+      top3.forEach(([letra, valor], idx) => {
+        resultadoHTML += `<p><strong>${idx + 1}. ${motivadores[letra]}</strong> (${valor} votos)</p>`;
+      });
+      resultadoHTML += `</div>`;
+
+      document.getElementById("result").innerHTML = resultadoHTML;
+    });
+  </script>
+</body>
+</html>
